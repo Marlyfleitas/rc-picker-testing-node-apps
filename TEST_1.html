@@ -1,71 +1,107 @@
-<html><head>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>ArcGIS Online OAuth</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 
-	<title>Quick Start - Leaflet</title>
+  <!-- Load Leaflet from CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
 
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="https://unpkg.com/esri-leaflet@3.0.4/dist/esri-leaflet.js"
+    integrity="sha512-oUArlxr7VpoY7f/dd3ZdUL7FGOvS79nXVVQhxlg6ij4Fhdc4QID43LUFRs7abwHNJ0EYWijiN5LP2ZRR2PY4hQ=="
+    crossorigin=""></script>
 
-	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico">
+  <!-- Load Esri Leaflet Vector from CDN -->
+  <script src="https://unpkg.com/esri-leaflet-vector@3.1.1/dist/esri-leaflet-vector.js"
+    integrity="sha512-7rLAors9em7cR3/583gZSvu1mxwPBUjWjdFJ000pc4Wpu+fq84lXF1l4dbG4ShiPQ4pSBUTb4e9xaO6xtMZIlA=="
+    crossorigin=""></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="">
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-
-
-
+  <style>
+    body { margin:0; padding:0; }
+    #map { position: absolute; top:0; bottom:0; right:0; left:0; }
+  </style>
 </head>
 <body>
 
+<style>
+  #auth {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    background: white;
+    padding: 1em;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    border-radius: 4px;
+  }
 
+  #auth input {
+    display: inline-block;
+    border: 1px solid #999;
+    font-size: 14px;
+    border-radius: 4px;
+    height: 28px;
+    line-height: 28px;
+  }
+</style>
 
-<div id="map" style="width: 600px; height: 400px; position: relative;" class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1; opacity: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 18; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" role="presentation" src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/12/2046/1361?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(-200px, -347px, 0px); opacity: 1;"><img alt="" role="presentation" src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/12/2047/1361?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(312px, -347px, 0px); opacity: 1;"><img alt="" role="presentation" src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/12/2046/1362?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(-200px, 165px, 0px); opacity: 1;"><img alt="" role="presentation" src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/12/2047/1362?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw" class="leaflet-tile leaflet-tile-loaded" style="width: 512px; height: 512px; transform: translate3d(312px, 165px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-shadow-pane"><img src="https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png" class="leaflet-marker-shadow leaflet-zoom-animated" alt="" style="margin-left: -12px; margin-top: -41px; width: 41px; height: 41px; transform: translate3d(300px, 247px, 0px);"></div><div class="leaflet-pane leaflet-overlay-pane"><svg pointer-events="none" class="leaflet-zoom-animated" width="720" height="480" viewBox="-60 -40 720 480" style="transform: translate3d(-60px, -40px, 0px);"><g><path class="leaflet-interactive" stroke="red" stroke-opacity="1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="#f03" fill-opacity="0.5" fill-rule="evenodd" d="M141.20355555554852,171.94704600190744a42,42 0 1,0 84,0 a42,42 0 1,0 -84,0 "></path><path class="leaflet-interactive" stroke="#3388ff" stroke-opacity="1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="#3388ff" fill-opacity="0.2" fill-rule="evenodd" d="M358 163L474 219L550 153z"></path></g></svg></div><div class="leaflet-pane leaflet-marker-pane"><img src="https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png" class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" alt="" tabindex="0" style="margin-left: -12px; margin-top: -41px; width: 25px; height: 41px; transform: translate3d(300px, 247px, 0px); z-index: 247;"></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"><div class="leaflet-popup  leaflet-zoom-animated" style="opacity: 1; transform: translate3d(300px, 125px, 0px); bottom: -7px; left: -88px;"><div class="leaflet-popup-content-wrapper"><div class="leaflet-popup-content" style="width: 136px;">My name is Francisco.</div></div><div class="leaflet-popup-tip-container"><div class="leaflet-popup-tip"></div></div><a class="leaflet-popup-close-button" href="#close">×</a></div></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(1.04805e+06px, 697379px, 0px) scale(4096);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="#" title="Zoom in" role="button" aria-label="Zoom in">+</a><a class="leaflet-control-zoom-out" href="#" title="Zoom out" role="button" aria-label="Zoom out">−</a></div></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"></div><div class="leaflet-bottom leaflet-right"><div class="leaflet-control-attribution leaflet-control"><a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a></div></div></div></div>
+<div id="map"></div>
+<div id="auth">
+  <a href="#" id="sign-in">Sign In</a>
+</div>
+
 <script>
+  var clientID = 'uoiMRafhECiH5uNE';
+  var accessToken;
+  var callbacks = [];
+  var protocol = window.location.protocol;
+  var callbackPage = protocol + '//esri.github.io/esri-leaflet/examples/oauth/callback.html';
 
-	var map = L.map('map').setView([51.505, -0.09], 13);
+  var authPane = document.getElementById('auth');
+  var signInButton = document.getElementById('sign-in');
 
-	var tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox/streets-v11',
-		tileSize: 512,
-		zoomOffset: -1
-	}).addTo(map);
+  // this function will open a window and start the oauth process
+  function oauth (callback) {
+    if (accessToken) {
+      callback(accessToken);
+    } else {
+      callbacks.push(callback);
+      window.open('https://www.arcgis.com/sharing/oauth2/authorize?client_id=' + clientID + '&response_type=token&expiration=20160&redirect_uri=' + window.encodeURIComponent(callbackPage), 'oauth', 'height=400,width=600,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes');
+    }
+  }
 
-	var marker = L.marker([51.5, -0.09]).addTo(map)
-		.bindPopup('<b>Hello world!</b><br />I am a popup.').openPopup();
+  // this function will be called when the oauth process is complete
+  window.oauthCallback = function (token) {
+    L.esri.get('https://www.arcgis.com/sharing/rest/portals/self', {
+      token: token
+    }, function (error, response) {
+      if (error) {
+        return;
+      }
 
-	var circle = L.circle([51.508, -0.11], {
-		color: 'red',
-		fillColor: '#f03',
-		fillOpacity: 0.5,
-		radius: 500
-	}).addTo(map).bindPopup('I am a circle.');
+      authPane.innerHTML = '<label>Hi ' + response.user.username + ' your token is <input value="' + token + '"></label>';
+    });
+  };
 
-	var polygon = L.polygon([
-		[51.509, -0.08],
-		[51.503, -0.06],
-		[51.51, -0.047]
-	]).addTo(map).bindPopup('I am a polygon.');
+  signInButton.addEventListener('click', function (e) {
+    oauth();
+    e.preventDefault();
+  });
 
+  // make a new map and basemap
+  var map = L.map('map').setView([39.36, -96.19], 4);
 
-	var popup = L.popup()
-		.setLatLng([51.513, -0.09])
-		.setContent('I am a standalone popup.')
-		.openOn(map);
-
-	function onMapClick(e) {
-		popup
-			.setLatLng(e.latlng)
-			.setContent('You clicked the map at ' + e.latlng.toString())
-			.openOn(map);
-	}
-
-	map.on('click', onMapClick);
-
+  L.esri.Vector.vectorBasemapLayer('ArcGIS:LightGray', {
+    apikey: apiKey // Replace with your API key - https://developers.arcgis.com
+  }).addTo(map);
 </script>
 
-
-
-
-
-</body></html>
+</body>
+</html>
